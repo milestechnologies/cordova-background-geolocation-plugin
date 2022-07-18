@@ -9,6 +9,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.util.Log;
+import android.os.Build;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
