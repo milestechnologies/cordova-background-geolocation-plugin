@@ -86,19 +86,39 @@ public class DistanceFilterLocationProvider extends AbstractLocationProvider imp
         alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
 
         // Stop-detection PI
-        stationaryAlarmPI = PendingIntent.getBroadcast(mContext, 0, new Intent(STATIONARY_ALARM_ACTION), 0);
+        int stationaryAlarmPIFlag = 0;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+        {
+            stationaryAlarmPIFlag = PendingIntent.FLAG_MUTABLE;
+        }
+        stationaryAlarmPI = PendingIntent.getBroadcast(mContext, 0, new Intent(STATIONARY_ALARM_ACTION), stationaryAlarmPIFlag);
         registerReceiver(stationaryAlarmReceiver, new IntentFilter(STATIONARY_ALARM_ACTION));
 
         // Stationary region PI
-        stationaryRegionPI = PendingIntent.getBroadcast(mContext, 0, new Intent(STATIONARY_REGION_ACTION), PendingIntent.FLAG_CANCEL_CURRENT);
+        int stationaryRegionPIFlag = PendingIntent.FLAG_CANCEL_CURRENT;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+        {
+            stationaryRegionPIFlag |= PendingIntent.FLAG_MUTABLE;
+        }
+        stationaryRegionPI = PendingIntent.getBroadcast(mContext, 0, new Intent(STATIONARY_REGION_ACTION), stationaryRegionPIFlag);
         registerReceiver(stationaryRegionReceiver, new IntentFilter(STATIONARY_REGION_ACTION));
 
         // Stationary location monitor PI
-        stationaryLocationPollingPI = PendingIntent.getBroadcast(mContext, 0, new Intent(STATIONARY_LOCATION_MONITOR_ACTION), 0);
+        int stationaryLocationPollingPIFlag = 0;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+        {
+            stationaryLocationPollingPIFlag = PendingIntent.FLAG_MUTABLE;
+        }
+        stationaryLocationPollingPI = PendingIntent.getBroadcast(mContext, 0, new Intent(STATIONARY_LOCATION_MONITOR_ACTION), stationaryLocationPollingPIFlag);
         registerReceiver(stationaryLocationMonitorReceiver, new IntentFilter(STATIONARY_LOCATION_MONITOR_ACTION));
 
         // One-shot PI (TODO currently unused)
-        singleUpdatePI = PendingIntent.getBroadcast(mContext, 0, new Intent(SINGLE_LOCATION_UPDATE_ACTION), PendingIntent.FLAG_CANCEL_CURRENT);
+        int singleLocationUpdatePIFlag = PendingIntent.FLAG_CANCEL_CURRENT;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+        {
+            singleLocationUpdatePIFlag |= PendingIntent.FLAG_MUTABLE;
+        }
+        singleUpdatePI = PendingIntent.getBroadcast(mContext, 0, new Intent(SINGLE_LOCATION_UPDATE_ACTION), singleLocationUpdatePIFlag);
         registerReceiver(singleUpdateReceiver, new IntentFilter(SINGLE_LOCATION_UPDATE_ACTION));
 
         // Location criteria
